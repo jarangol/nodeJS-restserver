@@ -1,41 +1,29 @@
 require('./config/config')
-
 const express = require('express')
+const mongoose = require('mongoose');
+const userController = require('./controllers/user');
+
 const app = express()
+
 const bodyParser = require('body-parser')
 
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
-app.get('/usuario', function(req, res) {
-    res.json('get usuario')
-});
+app.use(userController);
 
-app.post('/usuario', function(req, res) {
-    let body = req.body;
-    if (body.name === undefined) {
-        res.status(400).json({
-
-        });
-    }
-    res.json({
-        body
+mongoose.connect(process.env.urlDB, {
+        useCreateIndex: true,
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    }).then(console.log('Database online'))
+    .catch(err => {
+        throw new Error('Error while connecting to mongo')
     });
-});
-
-app.put('/usuario/:id', function(req, res) {
-    let id = req.params.id;
-    res.json({
-        id
-    });
-});
-
-app.delete('/usuario', function(req, res) {
-    res.json('delete usuario')
-});
 
 const port = process.env.PORT;
+
 app.listen(port, () => {
     console.log(`Listening to port ${port}`);
 });
