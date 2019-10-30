@@ -1,17 +1,15 @@
 require('./config/config')
+
 const express = require('express')
 const mongoose = require('mongoose');
-const userController = require('./controllers/user');
-
 const app = express()
 
 const bodyParser = require('body-parser')
-
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(bodyParser.json());
 
-app.use(userController);
+const routes = require('./controllers/routes');
+app.use(routes);
 
 mongoose.connect(process.env.urlDB, {
         useCreateIndex: true,
