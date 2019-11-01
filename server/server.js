@@ -1,15 +1,19 @@
-require('./config/config')
+require('./config/config');
 
-const express = require('express')
+const express = require('express');
 const mongoose = require('mongoose');
-const app = express()
+const app = express();
+const path = require('path');
+const bodyParser = require('body-parser');
 
-const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(bodyParser.json());
 
-const routes = require('./controllers/routes');
-app.use(routes);
+const publicPath = path.resolve(__dirname, '../public');
+app.use(express.static(publicPath));
+
+app.use(require('./controllers/routes'));
 
 mongoose.connect(process.env.urlDB, {
         useCreateIndex: true,
