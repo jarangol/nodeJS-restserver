@@ -32,7 +32,7 @@ app.get('/users', verifyToken, (req, res) => {
                 });
         })
         .catch(err => {
-            return res.json({
+            return res.status(500).json({
                 ok: false,
                 err
             })

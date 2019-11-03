@@ -108,6 +108,35 @@ function userImage(id, res, fileName) {
 };
 
 function productImage() {
+    Product.findById(id, (err, productDB) => {
+        if (err) {
+            deleteFile(fileName, 'users');
+            return res.status(500)
+                .json({
+                    ok: false,
+                    err
+                });
+        }
+
+        if (!productDB) {
+            deleteFile(fileName, 'products');
+            return res.status(400)
+                .json({
+                    ok: false,
+                    msg: "Product does't exist."
+                });
+        }
+
+        deleteFile(productDB.img, 'products')
+        productDB.img = fileName;
+
+        productDB.save((err, savedProduct) => {
+            res.json({
+                ok: true,
+                product: savedProduct
+            });
+        });
+    });
 
 }
 
