@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 const publicPath = path.resolve(__dirname, '../public');
 app.use(express.static(publicPath));
 
-app.use(require('./controllers/routes'));
+app.use(require('./routes/routes'));
 
 mongoose.connect(process.env.urlDB, {
         useCreateIndex: true,

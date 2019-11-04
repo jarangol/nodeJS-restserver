@@ -57,16 +57,18 @@ app.put('/upload/:type/:id', function(req, res) {
     let fileName = `${id}-${ new Date().getMilliseconds() }.${fileExtension}`
 
     file.mv(`uploads/${ type }/${ fileName }`, (err) => {
-        if (err)
+        if (err) {
             return res.status(500).json({
                 ok: false,
                 err
             });
+        }
 
-        if (type === 'users')
+        if (type === 'users') {
             userImage(id, res, fileName);
-        else
+        } else {
             productImage(id, res, fileName);
+        }
     });
 
 
@@ -107,7 +109,7 @@ function userImage(id, res, fileName) {
 
 };
 
-function productImage() {
+function productImage(id, res, fileName) {
     Product.findById(id, (err, productDB) => {
         if (err) {
             deleteFile(fileName, 'users');
@@ -142,7 +144,6 @@ function productImage() {
 
 function deleteFile(fileName, type) {
     let imagePath = path.resolve(__dirname, `../../uploads/${type}/${fileName}`);
-    console.log(imagePath);
 
     if (fs.existsSync(imagePath)) {
         fs.unlinkSync(imagePath);
